@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+	<!-- Personal -->
+	<link rel="icon" type="image/png" href="img/logo.png" />
+	<link rel="stylesheet" type="text/css" href="css/default.css" />
+	<meta charset="UTF-8">
+	<title>Welcome</title>
+
+	<!-- Materialize CSS -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" type="text/css" href="materialize/css/materialize.min.css" media="screen,projection" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+	<header class="Default-Header">
+
+	<div class="row center-align Login-Frame">
+		<img src="img/logo.png" />
+		<form method="post">
+			
+			<div class="row">
+				<div class="input-field col s12">
+					<input name="username" type="text" class="validate" autofocus="autofocus">
+					<label for="username">Usuário</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s12">
+					<input name="password" type="password" class="validate">
+					<label for="password">Senha</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s12">
+					<button class="btn btn-large waves-effect waves-light" type="submit" name="action">
+						Login<i class="material-icons right">send</i>
+					</button>
+				</div>
+			</div>
+			
+		</form>
+	</div>
+		
+	</header>
+
+	<!-- Materialize CSS -->
+	<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+</body>
+</html>

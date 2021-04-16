@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<!-- Personal -->
+<link rel="icon" type="image/png" href="img/logo.png" />
+<link rel="stylesheet" type="text/css" href="css/default.css" />
+<meta charset="UTF-8">
+<title>Welcome</title>
+
+<!-- Materialize CSS -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+</head>
+<body>
+	<header class="Welcome-Header">
+	
+	<img src="/img/title2.png" class="Welcome-Title" alt=""/>
+
+	<div class="row center-align Welcome-Frame">
+		<img src="img/logo.png"/>
+
+		<form class="col s12 initEvaluationForm" method="post">
+			
+			<div class="row">
+				<div class="input-field col s12">
+					<input name="crm" type="text" class="validate" autofocus="autofocus">
+					<label for="crm">CRM</label>
+				</div>
+				<div class="input-field col s12">
+					<button class="btn-large waves-effect waves-light center" type="submit" name="action">
+						Começar<i class="material-icons right">send</i>
+					</button>
+				</div>
+			</div>
+			
+		</form>
+		
+		<div class="row center-align">
+			<a href="/manager" class="waves-effect waves-light btn-small btn-flat">Gerencia<i class="material-icons left">lock_outline</i></a>
+			<a href="/about" class="waves-effect waves-light btn-small btn-flat">Sobre<i class="material-icons left">info_outline</i></a>
+			<a href="/articles" class="waves-effect waves-light btn-small btn-flat">Artigos<i class="material-icons left">live_help</i></a>
+		</div>
+		
+	</div>
+	
+	</header>
+
+	<!-- Materialize CSS -->
+	<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+
+</body>
+</html>

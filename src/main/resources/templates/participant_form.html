@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+	<!-- Personal -->
+	<link rel="icon" type="image/png" href="img/logo.png" />
+	<link rel="stylesheet" type="text/css" href="css/default.css" />
+	<meta charset="UTF-8">
+	<title>Cadastro de participante</title>
+
+	<!-- Materialize CSS -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" type="text/css" href="materialize/css/materialize.min.css" media="screen,projection" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+</head>
+<body>
+	<header class="Default-Header">
+	
+	<div class="row center-align Default-Frame">
+		<form class="col s12" method="post">
+			<div class="row center">
+				<br/><br/>
+				Seu CRM é:
+				<strong><span th:if="${first == true}" th:text="${participant.crm}"></span></strong>
+			</div>
+			<div class="row">
+				<div class="input-field col s6">
+					<select name="specialty" required class="browser-default">
+						<option value="">Escolha a especialidade</option>
+						<option value="Ortopedia">Ortopedia</option>
+						<option value="Radiologia">Radiologia</option>
+					</select>
+				</div>
+				<div class="input-field col s6">
+					<input name="experience" type="number" min="3" placeholder="Tempo de formado como médico" th:value="${participant.experience}" required>
+				</div>
+			</div>
+
+			<p>
+				Ao clicar em "Aceitar e prosseguir" você concordar com o nosso
+				<a href="/term" target="blank">Termo de Uso e Privacidade</a>.
+			</p>
+			<button class="btn waves-effect waves-light" type="submit" name="action">
+				Aceitar e prosseguir
+				<i class="material-icons right">send</i>
+			</button>
+
+			<br/><br/>
+		</form>
+	</div>
+	
+	</header>
+
+	<!-- Materialize CSS -->
+	<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+
+</body>
+</html>

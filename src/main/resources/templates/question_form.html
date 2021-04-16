@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<!-- Personal -->
+<link rel="icon" type="image/png" href="img/logo.png" />
+<link rel="stylesheet" type="text/css" href="css/default.css" />
+<meta charset="UTF-8">
+<title>Cadastro de questão</title>
+
+<!-- Materialize CSS -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+</head>
+<body>
+	<header class="Default-Header">
+
+	<div class="row center-align Default-Frame">
+		<img src="img/logo.png" class="Banner"/>
+		
+		<div class="row left-align">
+			<a th:href="@{/happForm?id=}+${question.happening.id}"  class="waves-effect waves-light btn-small btn-flat Back-Button">Voltar para <span th:text="${question.happening.name}"></span></a>
+		</div>
+		
+		<div class="Default-Content">
+			<div class="row">
+				<form class="col s12" method="post" enctype="multipart/form-data">
+					<input name="idHappening" type="hidden" th:value="${question.happening.id}">
+	
+					<img th:if="${question.getImgForString() != null}" th:src="*{'data:question.getImgForString()/jpg;base64,'+question.getImgForString()}" alt="" width="550" height="450">
+	
+					<div class="file-field input-field">
+						<div class="btn">
+							<span>Escolher arquivo</span>
+							<input name="file" type="file" accept="image/png, image/jpeg">
+						</div>
+						<div class="file-path-wrapper">
+							<input class="file-path validate" type="text">
+						</div>
+					</div>
+	
+					<div class="row">
+						<div class="input-field col s12">
+							<input name="ask" th:value="${question.ask}" type="text" class="validate" autofocus="autofocus">
+							<label for="ask">Questão</label>
+							<span th:if="${question.id == null}" class="helper-text" data-error="wrong" data-success="right" style="color: red">Aperte ENTER para salvar</span>
+						</div>
+					</div>
+					
+					<div class="row">
+						<!-- Modal Trigger -->
+						<a th:if="${question.id != null}" class="waves-effect waves-light btn modal-trigger" href="#modal1">Adicionar resposta</a>
+					</div>
+					
+					<div class="row" th:if="${question.answers.size() > 0}">
+						<ul th:each="answer : ${question.answers}" class="collection">
+							<li class="collection-item green bold center-align" th:if="${answer.correct == true}">
+								<span th:text="${answer.description}"></span>
+								<a class="btn waves-effect waves-teal btn-flat btn-floating QuestionButton" th:href="${(#mvc.url('AC#delete').arg(0, answer.id)).build()}"><i class="material-icons">delete</i></a>
+							</li>
+							<li class="collection-item red bold center-align" th:if="${answer.correct == false}">
+								<span th:text="${answer.description}"></span>
+								<a class="btn waves-effect waves-teal btn-flat btn-floating QuestionButton" th:href="${(#mvc.url('AC#delete').arg(0, answer.id)).build()}"><i class="material-icons">delete_forever</i></a>
+							</li>
+						</ul>
+					</div>
+	
+					<div class="row center-align">
+						<button class="btn waves-effect waves-light" type="submit" name="action">
+							Salvar<i class="material-icons right">send</i>
+						</button>
+					</div>
+	
+				</form>
+			</div>
+		</div>
+		
+	</div>
+		
+	</header>
+
+	<!-- Modal Structure -->
+	<div id="modal1" class="modal bottom-sheet">
+		<form th:action="@{/addAnswer?idQuestion=}+${question.id}" method="post" class="col s12">
+			<div class="modal-content">
+					<div class="row">
+						<div class="input-field col s6">
+							<input name="description" type="text" class="validate">
+							<label for="description">Opção de resposta</label>
+						</div>
+						<div class="input-field col s6">
+					 		<label>
+					        	<input name="correct" type="checkbox" />
+					        	<span>Essa é a correta?</span>
+					      	</label>
+		      			</div>
+					</div>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="modal-close btn-flat">Adicionar</button>
+			</div>
+		</form>
+	</div>
+
+	<script type="text/javascript">
+		document.addEventListener('DOMContentLoaded', function() {
+			var elems = document.querySelectorAll('.modal');
+			var instances = M.Modal.init(elems);
+		});
+	</script>
+
+	<!-- Materialize CSS -->
+	<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+
+</body>
+</html>

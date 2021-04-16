@@ -1,0 +1,118 @@
+@charset "ISO-8859-1";
+
+.Welcome-Header {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-image: url("../img/welcome_backgrond.jpg");
+} .Welcome-Title {
+	width: 300px;
+	height: 100px;
+} .Welcome-Frame {
+	max-width: 500px;
+	width: 100%;
+	background-color: white;
+	border-radius: 25px;
+	float: right;
+} .crmParticipantForm {
+	margin-top: 20px;
+	width: 300px;
+	background-color: #87CEEB;
+	border-radius: 25px;
+} .Term-Frame {
+	max-width: 800px;
+	width: 100%;
+	background-color: white;
+	border-radius: 25px;
+} .Default-Content {
+	margin-left: 20px;
+	margin-right: 20px;
+	text-align: justify;
+} .Default-Header {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-image: url("../img/background.jpg");	
+} .Default-Frame {
+	max-width: 700px;
+	width: 100%;
+	background-color: white;
+	border-radius: 25px;
+} .Login-Frame {
+	max-width: 300px;
+	width: 100%;
+	background-color: white;
+	border-radius: 25px;
+} .Banner {
+	width: 128px;
+	height: 128px;
+	float: center;
+} .Back-Button {
+	color: orange;
+	margin-left: 10px;
+} .LogoutButton {
+	float: right;
+	margin-top: 10px;
+} .initEvaluationForm {
+	margin-top: 50px;
+} .homeContainer {
+	display: flex;
+} .homeContent {
+	flex-shrink: 0;
+	max-width: 350px;
+	width: 100%;
+	margin: 5px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 50px;
+} .homeMenu {
+	flex-shrink: 0;
+	max-width: 240px;
+	width: 100%;
+	margin: 5px;
+} .QuestionButton {
+	float: inherit;
+}
+
+
+@font-face {
+  font-family: "sf_sports_night";
+  src: url("../font/sf_sports_night/SF Sports Night NS.ttf") format("truetype");
+}
+.TotalNumber {
+	font-family: sf_sports_night;
+  	background: -webkit-linear-gradient(#4597DC, #052358);
+  	-webkit-background-clip: text;
+  	-webkit-text-fill-color: transparent;
+  	font-weight: bold;
+	font-size: 36pt;
+	float: left;
+	margin-top: 10px;
+	margin-left: 30px;
+} .NotStartedStateNumber {
+	font-family: sf_sports_night;
+  	background: -webkit-linear-gradient(#052358, red);
+  	-webkit-background-clip: text;
+  	-webkit-text-fill-color: transparent;
+  	font-weight: bold;
+	font-size: 18pt;
+} .ProgressStateNumber {
+	font-family: sf_sports_night;
+  	background: -webkit-linear-gradient(#052358, yellow);
+  	-webkit-background-clip: text;
+  	-webkit-text-fill-color: transparent;
+  	font-weight: bold;
+	font-size: 18pt;
+} .ConcludedStateNumber {
+	font-family: sf_sports_night;
+  	background: -webkit-linear-gradient(#052358, green);
+  	-webkit-background-clip: text;
+  	-webkit-text-fill-color: transparent;
+  	font-weight: bold;
+	font-size: 18pt;
+}
+

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+	<!-- Personal -->
+	<link rel="icon" type="image/png" href="img/logo.png" />
+	<link rel="stylesheet" type="text/css" href="css/default.css" />
+	<meta charset="UTF-8">
+	<title>Cadastro de usuário</title>
+
+	<!-- Materialize CSS -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" type="text/css" href="materialize/css/materialize.min.css" media="screen,projection" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+</head>
+<body>
+	<div class="row frame">
+		<form class="col s12" method="post">
+			<div class="row">
+				<div class="input-field col s12">
+					<input id="name" type="text" class="validate">
+					<label>Nome</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s6">
+					<input id="username" type="text" class="validate">
+					<label>Usuário</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s6">
+					<input id="password" type="password" class="validate">
+					<label>Senha</label>
+				</div>
+				<div class="input-field col s6">
+					<input id="password" type="password" class="validate">
+					<label>Confirma senha</label>
+				</div>
+			</div>
+				<div class="row center">
+					<button class="btn waves-effect waves-light" type="submit" name="action">
+						Salvar<i class="material-icons right">save</i>
+					</button>
+				</div>
+		</form>
+	</div>
+
+	<!-- Materialize CSS -->
+	<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+
+</body>
+</html>

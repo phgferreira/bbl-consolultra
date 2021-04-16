@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+	<!-- Personal -->
+	<link rel="icon" type="image/png" href="img/logo.png" />
+	<link rel="stylesheet" type="text/css" href="css/default.css" />
+	<meta charset="UTF-8">
+	<title>Cadastro de Avaliação</title>
+	
+	<!-- Materialize CSS -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" type="text/css" href="materialize/css/materialize.min.css" media="screen,projection" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+	<header class="Default-Header">
+	
+	<div class="row center-align Default-Frame">
+		<img src="img/logo.png" class="Banner"/>
+		
+		<div class="row left-align">
+			<a th:href="@{/evalForm?id=}+${happening.evaluation.id}"  class="waves-effect waves-light btn-small btn-flat Back-Button">Voltar para <span th:text="${happening.evaluation.title}"></span></a>
+		</div>
+		
+		<div class="Default-Content">
+		<div class="row">
+			<form class="col s12" method="post">
+				<input name="idEvaluation" th:value="${happening.evaluation.id}" type="hidden">
+			
+				<div class="row">
+					<div class="input-field col s6">
+						<input name="name" th:value="${happening.name}" type="text" class="validate" autofocus="autofocus">
+						<label for="name">Nome do Caso</label>
+						<span th:if="${happening.id == null}" class="helper-text" data-error="wrong" data-success="right" style="color: red">Aperte ENTER para salvar</span>
+					</div>
+				</div>
+				
+				<div th:if="${happening.id != null}" class="row">
+					<table>
+						<thead>
+							<tr>
+								<th>Imagem</th>
+								<th>Pergunta</th>
+								<th>
+									<a th:href="@{/questForm?idHappening=}+${happening.id}" class="btn-floating btn-large waves-effect waves-light red">
+										<i class="material-icons">add</i>
+									</a>
+								</th>
+							</tr>
+						</thead>
+						<tbody th:each="question : ${happening.questions}">
+							<tr>
+								<td>
+									<a th:href="@{/questForm?id=}+${question.id}">
+										<img th:if="${question.getImgForString() != null}" th:src="*{'data:question.getImgForString()/jpg;base64,'+question.getImgForString()}" alt="" width="200" height="150">
+									</a>
+								</td>
+								<td>
+									<a th:href="@{/questForm?id=}+${question.id}">
+										<span th:text="${question.ask}"></span>
+									</a>
+								</td>
+								<td class="right">
+									<a class="btn" th:href="${(#mvc.url('QC#delete').arg(0, question.id)).build()}">
+										<i class="material-icons">delete</i>
+									</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="row center-align">
+					<button class="btn waves-effect waves-light" type="submit" name="action">
+						Salvar<i class="material-icons right">send</i>
+					</button>
+				</div>
+
+			</form>
+		</div>
+			
+		</div>
+
+	</div>
+	
+	</header>
+
+	<!-- Materialize CSS -->
+	<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+	<!-- Personal -->
+	<link rel="icon" type="image/png" href="img/logo.png" />
+	<link rel="stylesheet" type="text/css" href="css/default.css" />
+	<meta charset="UTF-8">
+	<title>Home</title>
+
+	<!-- Materialize CSS -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" type="text/css" href="materialize/css/materialize.min.css" media="screen,projection" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+</head>
+<body>
+	<header class="Default-Header">
+	
+	<div class="row center-align Default-Frame">
+		<img src="img/logo.png" class="Banner"/>
+		<br/>
+
+		<div class="row center-align">
+			<a class="btn btn-small btn-flat waves-effect waves-light" type="button" href="/">
+				Logout<i class="material-icons small left">power_settings_new</i>
+			</a>
+		</div>
+
+		<div id="homeContainer" class="homeContainer">
+			<table class="highlight homeContent">
+				<thead>
+					<tr>
+						<th>Título</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="evaluation : ${evaluations}">
+						<td><a th:href="${(#mvc.url('DC#init').arg(0, participant.id).arg(1, evaluation.id)).build()}" onclick="activeLoad()">
+							<span th:text="${evaluation.title}"></span>
+						</a></td>
+						<td>Não iniciado</td>
+					</tr>
+					<tr th:each="answerCard : ${participant.answerCards}">
+						<td><a th:href="${(#mvc.url('DC#next').arg(0, answerCard.id)).build()}" onclick="activeLoad()">
+							<span th:text="${answerCard.evaluation.title}"></span>
+						</a></td>
+						<td>
+							<span th:if="${answerCard.state == T(br.com.bbl.consolultra.model.AnswerCardState).PROGRESS}" >Em progresso</span>
+							<span th:if="${answerCard.state == T(br.com.bbl.consolultra.model.AnswerCardState).COMPLETE}">Concluído</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		
+		</div>
+		
+		<div id="loadingImg" class="center-align" style="display: none">
+			<img src="img/loading.gif" alt="" width="200" height="173"/>
+			<br/><br/>
+		</div>
+
+	</div>
+		
+	</header>
+
+	<script type="text/javascript">
+		function activeLoad() {
+			document.getElementById('loadingImg').style.display = 'block';
+			document.getElementById('homeContainer').hidden = 'true';
+		}
+	</script>
+
+	<!-- Materialize CSS -->
+	<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+
+</body>
+</html>

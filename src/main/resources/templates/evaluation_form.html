@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+	<!-- Personal -->
+	<link rel="icon" type="image/png" href="img/logo.png" />
+	<link rel="stylesheet" type="text/css" href="css/default.css" />
+	<meta charset="UTF-8">
+	<title>Cadastro de Avaliação</title>
+	
+	<!-- Materialize CSS -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" type="text/css" href="materialize/css/materialize.min.css" media="screen,projection" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+	<header class="Default-Header">
+	
+	<div class="row center-align Default-Frame">
+		<img src="img/logo.png" class="Banner"/>
+		
+		<div class="row left-align">
+				<a href="/evalList"  class="waves-effect waves-light btn-small btn-flat Back-Button">Voltar para Home</a> 
+		</div>
+		<br/>
+		
+		<div class="Default-Content">
+		<div class="row">
+			<form class="col s12" method="post">
+
+				<div class="row">
+					<div class="input-field col s6">
+						<input name="title" th:value="${evaluation.title}" type="text" class="validate" autofocus="autofocus">
+						<label for="title">Título da Avaliação</label>
+						<span th:if="${evaluation.id == null}" class="helper-text" data-error="wrong" data-success="right" style="color: red">Aperte ENTER para salvar</span>
+					</div>
+					<div th:if="${evaluation.id != null}" class="input-field col s6">
+						<input name="created" type="date" readonly="readonly" th:value="${#calendars.format(evaluation.date, 'yyyy-MM-dd')}">
+						<label for="created">Criado em:</label>
+					</div>
+				</div>
+				
+				<div th:if="${evaluation.id != null}" class="row">
+					<table class="highlight">
+						<thead>
+							<tr>
+								<th>Caso</th>
+								<th>Qt. perguntas</th>
+								<th class="right-align">
+									<a th:href="@{/happForm?idEvaluation=}+${evaluation.id}" class="btn-floating btn-large waves-effect waves-light red">
+										<i class="material-icons">add</i>
+									</a>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="happening : ${evaluation.happenings}">
+								<td>
+									<a th:href="@{/happForm?id=}+${happening.id}">
+										<span th:text="${happening.name}"></span>
+									</a></td>
+								<td><span th:text="${happening.questions.size()}"></span></td>
+								<td class="right">
+									<a class="btn" th:href="${(#mvc.url('HC#delete').arg(0, happening.id)).build()}">
+										<i class="material-icons">delete</i>
+									</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
+				<div class="row center-align">
+					<button class="btn waves-effect waves-light" type="submit" name="action">
+						Salvar<i class="material-icons right">send</i>
+					</button>
+				</div>
+
+			</form>
+		</div>
+			
+		</div>
+
+	</div>
+
+	</header>
+
+
+	<!-- Materialize CSS -->
+	<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+
+</body>
+</html>

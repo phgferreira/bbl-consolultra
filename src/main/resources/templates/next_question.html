@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+	<!-- Personal -->
+	<link rel="icon" type="image/png" href="img/logo.png" />
+	<link rel="stylesheet" type="text/css" href="css/default.css" />
+	<meta charset="UTF-8">
+	<title>Questão</title>
+
+	<!-- Materialize CSS -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" type="text/css" href="materialize/css/materialize.min.css" media="screen,projection" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+	<header class="Default-Header">
+	
+	<div class="row center-aligh Default-Frame">
+	
+		<div class="row left-align">
+				<a th:href="@{/home?id=}+${answerSelected.answerCard.participant.id}"  class="waves-effect waves-light btn-small btn-flat Back-Button">Voltar</a>
+			
+		</div>
+
+		<div id="loadingImg" class="center-align" style="display: none">
+			<img src="img/loading.gif" alt="" width="200" height="173"/>
+			<br/><br/><br/>
+		</div>
+		
+		<div id="homeContainer" class="Default-Content">
+			<div class="row">
+				<form class="col s12" method="post" enctype="multipart/form-data">
+					
+					<img th:if="${answerSelected.question.getImgForString() != null}" th:src="*{'data:answerSelected.question.getImgForString()/jpg;base64,'+answerSelected.question.getImgForString()}" alt="" width="550" height="450">
+					
+					<h4 class="center">
+						<span th:text="${answerSelected.question.ask}"></span>
+					</h4>
+	
+					<div class="collection" th:each="answer : ${answerSelected.question.answers}">
+						<a th:href="${(#mvc.url('DC#answering').arg(0, answer.id).arg(1, answerSelected.id)).build()}" class="collection-item" onclick="activeLoad()"><span th:text="${answer.description}"></span></a>
+					</div>
+					
+				</form>
+			</div>
+		</div>
+
+
+	</div>
+		
+	</header>
+
+	<!-- Materialize CSS -->
+	<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+	<script type="text/javascript">
+	function activeLoad() {
+		document.getElementById('loadingImg').style.display = 'block';
+		document.getElementById('homeContainer').hidden = 'true';
+	}
+	</script>
+
+</body>
+</html>

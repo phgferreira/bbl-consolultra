@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymeleaf.org">
+<head>
+	<!-- Personal -->
+	<link rel="icon" type="image/png" href="img/logo.png"/>
+	<link rel="stylesheet" type="text/css" href="css/default.css"/>
+	<meta charset="UTF-8">
+	<title>Lista de Avaliações</title>
+
+	<!-- Materialize CSS -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" type="text/css" href="materialize/css/materialize.min.css" media="screen,projection" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+</head>
+<body>
+	<header class="Default-Header">
+
+	<div class="row center-align Default-Frame">
+
+		<div class="LogoutButton">
+			<a href="/logout" class="waves-effect waves-light btn-small btn-flat">Logout<i class="material-icons left">power_settings_new</i></a>
+		</div>
+
+		<span th:text="${participants.size()}" class="TotalNumber"></span>
+	
+		<img src="img/logo.png" class="Banner"/>
+
+
+		<div class="Default-Content">
+
+		<nav class="nav-extended">
+			<div class="nav-content">
+				<a class="btn-floating btn-large halfway-fab waves-effect waves-light teal" type="button" href="/evalForm">
+					<i class="material-icons">add</i>
+				</a>
+			</div>
+		</nav>
+		<br/>
+
+		<table class="highlight">
+			<thead>
+				<tr>
+					<th>Avaliação</th>
+					<th>Criado em</th>
+					<th>Não começou
+					<th>Em progresso</th>
+					<th>Concluído</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:if="${evaluation.active}" th:each="evaluation : ${evaluations}">
+					<td>
+						<a th:href="${(#mvc.url('EC#form').arg(0, evaluation.id)).build()}">
+							<span id="title" th:text="${evaluation.title}"></span>
+						</a>
+					</td>
+					<td><span th:text="${#calendars.format(evaluation.date, 'dd/MM/yyyy')}"></span></td>
+					<td class="center-align NotStartedStateNumber"><span th:text="${participants.size() - evaluation.getAnswerCards().size()}"></span></td>
+					<td class="center-align ProgressStateNumber"><span th:text="${evaluation.getAnswercardsByState(T(br.com.bbl.consolultra.model.AnswerCardState).PROGRESS).size()}"></span></td>
+					<td class="center-align ConcludedStateNumber"><span th:text="${evaluation.getAnswercardsByState(T(br.com.bbl.consolultra.model.AnswerCardState).COMPLETE).size()}"></span></td>
+					<td class="right">
+						<a class="btn" th:href="${(#mvc.url('EC#delete').arg(0, evaluation.id)).build()}">
+							<i class="material-icons">delete</i>
+						</a>
+					</td>
+					<td class="right">
+						<a th:id="'btn' + ${evaluation.id}"class="btn" th:href="${(#mvc.url('EC#downloadExcel').arg(0, evaluation.id)).build()}" th:onclick="|activeLoad('${evaluation.id}')|">
+							<i class="material-icons">file_download</i>
+						</a>
+						<img th:id="'img' + ${evaluation.id}" src="img/loading_dates.gif" alt="" width="36" height="36" style="display: none"/>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<div class="center-align">
+			<h6><span th:text="${teste}"></span></h6>
+		</div>
+		
+		</div>
+		
+	</div>
+		
+	</header>
+
+	<script type="text/javascript">
+		function activeLoad(id) {
+			//document.getElementById('img' + id).style.display = 'block';
+			//document.getElementById('btn' + id).style.display = 'none';
+		}
+	</script>
+
+	<!-- Materialize CSS -->
+	<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+
+</body>
+</html>
