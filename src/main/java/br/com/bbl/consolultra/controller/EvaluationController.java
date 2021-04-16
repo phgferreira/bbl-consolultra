@@ -53,7 +53,7 @@ public class EvaluationController {
 	private AnswerSelectedRepository asr;
 	
 	@RequestMapping(value = "/evalList")
-	public ModelAndView list() {
+	private ModelAndView list() {
 		// Carrega a lista de avaliações
 		List<Evaluation> evaluations = new ArrayList<Evaluation>();
 		er.findAll().forEach(evaluations::add);
@@ -70,17 +70,17 @@ public class EvaluationController {
 	}
 	
 	@RequestMapping(value = "/evalForm", method = RequestMethod.GET)
-	public ModelAndView form(Integer id) {
+	private ModelAndView form(Integer id) {
 		// Se informar um id então carrega do BD
 		Evaluation evaluation = (id != null ? er.findById(id).get() : new Evaluation());
 		
-		ModelAndView mv = new ModelAndView("/evaluation_form");
+		ModelAndView mv = new ModelAndView("evaluation_form");
 		mv.addObject("evaluation", evaluation);
 		return mv;
 	}
 	
 	@RequestMapping(value = "/evalForm", method = RequestMethod.POST)
-	public String save(@Validated Evaluation evaluation, String created) {
+	private String save(@Validated Evaluation evaluation, String created) {
 		// Se estiver salvando uma avaliação nova automaticamente define como ativo
 		evaluation.setActive(true);
 		if (evaluation.getId() == null) {
@@ -99,7 +99,7 @@ public class EvaluationController {
 	}
 
 	@RequestMapping(value = "/evalDelete")
-	public String delete(Integer id) {
+	private String delete(Integer id) {
 		Evaluation evaluation = er.findById(id).get();
 		
 		// Se a avaliação tiver algum cartão resposta então não deleta, apenas inativa
@@ -125,7 +125,7 @@ public class EvaluationController {
 	}
 	
 	@RequestMapping(value = "/downloadExcel")
-	public void downloadExcel(Integer id, HttpServletResponse response, HttpServletRequest request) {
+	private void downloadExcel(Integer id, HttpServletResponse response, HttpServletRequest request) {
 		Evaluation evaluation = er.findById(id).get();
 		
 		response.setContentType("application/xls");
@@ -146,7 +146,7 @@ public class EvaluationController {
 	
 	// ############################### To Question ###############################
 	@RequestMapping(value = "/removeQuest")
-	public String removeQuest(Integer id) {
+	private String removeQuest(Integer id) {
 		Question question = qr.findById(id).get();
 		
 		// Antes de deletar a questão precisa deletar suas respostas (dependências)
