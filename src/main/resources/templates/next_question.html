@@ -32,7 +32,7 @@
 			<div class="row">
 				<form class="col s12" method="post" enctype="multipart/form-data">
 					
-					<img th:if="${answerSelected.question.getImgForString() != null}" th:src="*{'data:answerSelected.question.getImgForString()/jpg;base64,'+answerSelected.question.getImgForString()}" alt="" width="550" height="450">
+					<img th:if="${answerSelected.question.getImgForString() != null}" th:src="*{'data:answerSelected.question.getImgForString()/jpg;base64,'+answerSelected.question.getImgForString()}" alt="" width="100%">
 					
 					<h4 class="center">
 						<span th:text="${answerSelected.question.ask}"></span>

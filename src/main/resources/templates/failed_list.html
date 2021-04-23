@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymeleaf.org">
+<head>
+	<!-- Personal -->
+	<link rel="icon" type="image/png" href="img/logo.png"/>
+	<link rel="stylesheet" type="text/css" href="css/default.css"/>
+	<meta charset="UTF-8">
+	<title>Lista de Avaliações</title>
+
+	<!-- Materialize CSS -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" type="text/css" href="materialize/css/materialize.min.css" media="screen,projection" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+</head>
+<body>
+	<header class="Default-Header">
+
+	<div class="row center-align Default-Frame">
+
+		<img src="img/logo.png" class="Banner"/>
+		
+		<div class="row left-align">
+				<a href="/evalList"  class="waves-effect waves-light btn-small btn-flat Back-Button">Voltar para Home</a> 
+		</div>
+		<br/>
+
+		<div class="Default-Content">
+
+		<table class="highlight">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Data e Hora</th>
+					<th>Menssagem</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="failed : ${faileds}">
+					<td><span th:text="${failed.id}"></span></td>
+					<td><span th:text="${#calendars.format(failed.date, 'dd/MM/yyyy')}"></span></td>
+					<td><span th:text="${failed.message}"></span></td>
+				</tr>
+			</tbody>
+		</table>
+		
+		</div>
+		
+	</div>
+		
+	</header>
+
+	<!-- Materialize CSS -->
+	<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+
+</body>
+</html>

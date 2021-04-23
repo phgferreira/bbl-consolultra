@@ -30,7 +30,7 @@
 
 				<div class="row">
 					<div class="input-field col s6">
-						<input name="title" th:value="${evaluation.title}" type="text" class="validate" autofocus="autofocus">
+						<input name="title" th:value="${evaluation.title}" type="text" class="validate" autofocus="autofocus" required="required">
 						<label for="title">Título da Avaliação</label>
 						<span th:if="${evaluation.id == null}" class="helper-text" data-error="wrong" data-success="right" style="color: red">Aperte ENTER para salvar</span>
 					</div>

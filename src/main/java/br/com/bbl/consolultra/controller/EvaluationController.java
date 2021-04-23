@@ -20,12 +20,14 @@ import org.springframework.web.servlet.ModelAndView;
 import br.com.bbl.consolultra.model.Answer;
 import br.com.bbl.consolultra.model.AnswerSelected;
 import br.com.bbl.consolultra.model.Evaluation;
+import br.com.bbl.consolultra.model.Failed;
 import br.com.bbl.consolultra.model.Happening;
 import br.com.bbl.consolultra.model.Participant;
 import br.com.bbl.consolultra.model.Question;
 import br.com.bbl.consolultra.repository.AnswerRepository;
 import br.com.bbl.consolultra.repository.AnswerSelectedRepository;
 import br.com.bbl.consolultra.repository.EvaluationRepository;
+import br.com.bbl.consolultra.repository.FailedRepository;
 import br.com.bbl.consolultra.repository.HappeningRepository;
 import br.com.bbl.consolultra.repository.ParticipantRepository;
 import br.com.bbl.consolultra.repository.QuestionRepository;
@@ -52,76 +54,108 @@ public class EvaluationController {
 	@Autowired
 	private AnswerSelectedRepository asr;
 	
+	@Autowired
+	private FailedRepository fr;
+	
 	@RequestMapping(value = "/evalList")
 	private ModelAndView list() {
-		// Carrega a lista de avaliações
-		List<Evaluation> evaluations = new ArrayList<Evaluation>();
-		er.findAll().forEach(evaluations::add);
-		Collections.sort(evaluations, Collections.reverseOrder());
-
-		// Carrega a lista de avaliações
-		List<Participant> participants = new ArrayList<Participant>();
-		pr.findAll().forEach(participants::add);
-
-		ModelAndView mv = new ModelAndView("evaluation_list");
-		mv.addObject("evaluations", evaluations);
-		mv.addObject("participants", participants);
-		return mv;
+		try {
+			// Carrega a lista de avaliações
+			List<Evaluation> evaluations = new ArrayList<Evaluation>();
+			er.findAll().forEach(evaluations::add);
+			Collections.sort(evaluations, Collections.reverseOrder());
+	
+			// Carrega a lista de avaliações
+			List<Participant> participants = new ArrayList<Participant>();
+			pr.findAll().forEach(participants::add);
+	
+			ModelAndView mv = new ModelAndView("evaluation_list");
+			mv.addObject("evaluations", evaluations);
+			mv.addObject("participants", participants);
+			return mv;
+		} catch (Exception e) {
+			Failed failed = new Failed(e.getMessage());
+			fr.save(failed);
+			ModelAndView mv = new ModelAndView("failed");
+			mv.addObject("message", failed.getMessage());
+			return mv;
+		}
 	}
 	
 	@RequestMapping(value = "/evalForm", method = RequestMethod.GET)
 	private ModelAndView form(Integer id) {
-		// Se informar um id então carrega do BD
-		Evaluation evaluation = (id != null ? er.findById(id).get() : new Evaluation());
-		
-		ModelAndView mv = new ModelAndView("evaluation_form");
-		mv.addObject("evaluation", evaluation);
-		return mv;
+		try {
+			// Se informar um id então carrega do BD
+			Evaluation evaluation = (id != null ? er.findById(id).get() : new Evaluation());
+			
+			ModelAndView mv = new ModelAndView("evaluation_form");
+			mv.addObject("evaluation", evaluation);
+			return mv;
+		} catch (Exception e) {
+			Failed failed = new Failed(e.getMessage());
+			fr.save(failed);
+			ModelAndView mv = new ModelAndView("failed");
+			mv.addObject("message", failed.getMessage());
+			return mv;
+		}
 	}
 	
 	@RequestMapping(value = "/evalForm", method = RequestMethod.POST)
 	private String save(@Validated Evaluation evaluation, String created) {
-		// Se estiver salvando uma avaliação nova automaticamente define como ativo
-		evaluation.setActive(true);
-		if (evaluation.getId() == null) {
-			evaluation.setDate(new Date());
-		} else {
-			try {
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				evaluation.setDate(sdf.parse(created));
-			} catch (ParseException e1) {
-				e1.printStackTrace();
+		try {
+			// Se estiver salvando uma avaliação nova automaticamente define como ativo
+			evaluation.setActive(true);
+			if (evaluation.getId() == null) {
+				evaluation.setDate(new Date());
+			} else {
+				try {
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+					evaluation.setDate(sdf.parse(created));
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
 			}
-		}
+	
+			er.save(evaluation);
+			return "redirect:/evalForm?id=" + evaluation.getId();
 
-		er.save(evaluation);
-		return "redirect:/evalForm?id=" + evaluation.getId();
+		} catch (Exception e) {
+			Failed failed = new Failed(e.getMessage());
+			fr.save(failed);
+			return "redirect:/failed?id=" + failed.getId();
+		}
 	}
 
 	@RequestMapping(value = "/evalDelete")
 	private String delete(Integer id) {
-		Evaluation evaluation = er.findById(id).get();
-		
-		// Se a avaliação tiver algum cartão resposta então não deleta, apenas inativa
-		if (evaluation.getAnswerCards().size() > 0) {
-			// Caso alguém já tenha realizado então só inativa a avaliação
-			evaluation.setActive(false);
-			er.save(evaluation);
-		// Senão, então deleta tudo
-		} else {
-			for (Happening happening : evaluation.getHappenings()) {
-				for (Question question : happening.getQuestions()) {
-					for (Answer answer : question.getAnswers()) {
-						ar.delete(answer);
+		try {
+			Evaluation evaluation = er.findById(id).get();
+			// Se a avaliação tiver algum cartão resposta então não deleta, apenas inativa
+			if (evaluation.getAnswerCards().size() > 0) {
+				// Caso alguém já tenha realizado então só inativa a avaliação
+				evaluation.setActive(false);
+				er.save(evaluation);
+			// Senão, então deleta tudo
+			} else {
+				for (Happening happening : evaluation.getHappenings()) {
+					for (Question question : happening.getQuestions()) {
+						for (Answer answer : question.getAnswers()) {
+							ar.delete(answer);
+						}
+						qr.delete(question);
 					}
-					qr.delete(question);
+					hr.delete(happening);
 				}
-				hr.delete(happening);
+				er.delete(evaluation);
 			}
-			er.delete(evaluation);
-		}
 
-		return "redirect:/evalList";
+			return "redirect:/evalList";
+
+		} catch (Exception e) {
+			Failed failed = new Failed(e.getMessage());
+			fr.save(failed);
+			return "redirect:/failed?id=" + failed.getId();
+		}
 	}
 	
 	@RequestMapping(value = "/downloadExcel")
@@ -147,18 +181,25 @@ public class EvaluationController {
 	// ############################### To Question ###############################
 	@RequestMapping(value = "/removeQuest")
 	private String removeQuest(Integer id) {
-		Question question = qr.findById(id).get();
-		
-		// Antes de deletar a questão precisa deletar suas respostas (dependências)
-		for (Answer answer : ar.findByQuestion(question)) {
-			// Antes de deletar a pergunta deleta as seleções realizadas pelos participantes
-			for (AnswerSelected answerSelected : answer.getAnswerSelecteds()) {
-				asr.delete(answerSelected);
+		try {
+			Question question = qr.findById(id).get();
+			// Antes de deletar a questão precisa deletar suas respostas (dependências)
+			for (Answer answer : ar.findByQuestion(question)) {
+				// Antes de deletar a pergunta deleta as seleções realizadas pelos participantes
+				for (AnswerSelected answerSelected : answer.getAnswerSelecteds()) {
+					asr.delete(answerSelected);
+				}
+				ar.delete(answer);
 			}
-			ar.delete(answer);
+			
+			qr.delete(question);
+
+			return "redirect:/evalForm?id=" + question.getHappening().getEvaluation().getId();
+			
+		} catch (Exception e) {
+			Failed failed = new Failed(e.getMessage());
+			fr.save(failed);
+			return "redirect:/failed?id=" + failed.getId();
 		}
-		
-		qr.delete(question);
-		return "redirect:/evalForm?id=" + question.getHappening().getEvaluation().getId();
 	}	
 }

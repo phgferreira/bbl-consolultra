@@ -30,7 +30,7 @@
 			
 				<div class="row">
 					<div class="input-field col s6">
-						<input name="name" th:value="${happening.name}" type="text" class="validate" autofocus="autofocus">
+						<input name="name" th:value="${happening.name}" type="text" class="validate" autofocus="autofocus" required="required">
 						<label for="name">Nome do Caso</label>
 						<span th:if="${happening.id == null}" class="helper-text" data-error="wrong" data-success="right" style="color: red">Aperte ENTER para salvar</span>
 					</div>
@@ -40,9 +40,10 @@
 					<table>
 						<thead>
 							<tr>
-								<th>Imagem</th>
+								<th colspan="2">Imagem</th>
 								<th>Pergunta</th>
-								<th>
+								<th>Respostas</th>
+								<th colspan="2" class="right">
 									<a th:href="@{/questForm?idHappening=}+${happening.id}" class="btn-floating btn-large waves-effect waves-light red">
 										<i class="material-icons">add</i>
 									</a>
@@ -52,18 +53,39 @@
 						<tbody th:each="question : ${happening.questions}">
 							<tr>
 								<td>
-									<a th:href="@{/questForm?id=}+${question.id}">
-										<img th:if="${question.getImgForString() != null}" th:src="*{'data:question.getImgForString()/jpg;base64,'+question.getImgForString()}" alt="" width="200" height="150">
-									</a>
+									<span th:text="${happening.questions.indexOf(question)+1}"></span>
 								</td>
 								<td>
-									<a th:href="@{/questForm?id=}+${question.id}">
-										<span th:text="${question.ask}"></span>
-									</a>
+									<img th:if="${question.getImgForString() != null}" th:src="*{'data:question.getImgForString()/jpg;base64,'+question.getImgForString()}" alt="" width="200" height="150">
+									<span th:if="${question.getImgForString() == null}">Sem imagem</span>
+								</td>
+								<td>
+									<span th:if="${!question.ask.isEmpty()}" th:text="${question.ask}"></span>
+									<span th:if="${question.ask.isEmpty()}">Sem pergunta</span>
+								</td>
+								<td>
+									<div class="row" th:if="${question.answers.size() > 0}">
+										<ul th:each="answer : ${question.answers}" class="collection">
+											<li class="collection-item green bold center-align" th:if="${answer.correct == true}">
+												<span th:text="${answer.description}"></span>
+												<a class="btn waves-effect waves-teal btn-flat btn-floating QuestionButton" th:href="${(#mvc.url('AC#delete').arg(0, answer.id)).build()}"><i class="material-icons">delete</i></a>
+											</li>
+											<li class="collection-item red bold center-align" th:if="${answer.correct == false}">
+												<span th:text="${answer.description}"></span>
+												<a class="btn waves-effect waves-teal btn-flat btn-floating QuestionButton" th:href="${(#mvc.url('AC#delete').arg(0, answer.id)).build()}"><i class="material-icons">delete_forever</i></a>
+											</li>
+										</ul>
+									</div>
+									<span th:if="${question.answers.size() == 0}">Sem respostas</span>
 								</td>
 								<td class="right">
 									<a class="btn" th:href="${(#mvc.url('QC#delete').arg(0, question.id)).build()}">
 										<i class="material-icons">delete</i>
+									</a>
+								</td>
+								<td class="right">
+									<a class="btn" th:href="@{/questForm?id=}+${question.id}">
+										<i class="material-icons">edit</i>
 									</a>
 								</td>
 							</tr>

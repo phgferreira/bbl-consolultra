@@ -19,8 +19,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import br.com.bbl.consolultra.model.AnswerCard;
 import br.com.bbl.consolultra.model.Evaluation;
+import br.com.bbl.consolultra.model.Failed;
 import br.com.bbl.consolultra.model.Participant;
 import br.com.bbl.consolultra.repository.EvaluationRepository;
+import br.com.bbl.consolultra.repository.FailedRepository;
 import br.com.bbl.consolultra.repository.ParticipantRepository;
 
 @Controller
@@ -31,32 +33,42 @@ public class HomeController {
 	
 	@Autowired
 	private EvaluationRepository er;
+	
+	@Autowired
+	private FailedRepository fr;
 
 	@RequestMapping(value = "/home")
 	private ModelAndView home(Integer id) {
-		Participant participant = pr.findById(id).get();
-
-		// Carrega todas as avaliações
-		List<Evaluation> evaluations = new ArrayList<Evaluation>();
-		er.findAll().iterator().forEachRemaining(evaluations::add);
-
-		// Remove da lista as avaliações inativadas
-		for (Evaluation evaluation : evaluations) {
-			if (!evaluation.getActive()) {
-				evaluations.remove(evaluation);
+		try {
+			Participant participant = pr.findById(id).get();
+	
+			// Carrega todas as avaliações
+			List<Evaluation> evaluations = new ArrayList<Evaluation>();
+			er.findAll().iterator().forEachRemaining(evaluations::add);
+	
+			// Remove da lista as avaliações inativadas
+			for (Evaluation evaluation : evaluations) {
+				if (!evaluation.getActive()) {
+					evaluations.remove(evaluation);
+				}
 			}
+	
+			// Remove da lista de avaliações o que já foi iniciado
+			for (AnswerCard answerCards : participant.getAnswerCards()) {
+				evaluations.remove(answerCards.getEvaluation());
+			}
+			
+			ModelAndView mv = new ModelAndView("home");
+			mv.addObject("participant", participant);
+			mv.addObject("evaluations", evaluations);
+			return mv;
+		} catch (Exception e) {
+			Failed failed = new Failed(e.getMessage());
+			fr.save(failed);
+			ModelAndView mv = new ModelAndView("failed");
+			mv.addObject("message", failed.getMessage());
+			return mv;
 		}
-
-		// Remove da lista de avaliações o que já foi iniciado
-		for (AnswerCard answerCards : participant.getAnswerCards()) {
-			evaluations.remove(answerCards.getEvaluation());
-		}
-		
-		ModelAndView mv = new ModelAndView("home");
-		mv.addObject("participant", participant);
-		mv.addObject("evaluations", evaluations);
-		return mv;
-		
 	}
 
 	@RequestMapping(value = "/pdf/{fileName:.+}", method = RequestMethod.GET, produces = "application/pdf")
