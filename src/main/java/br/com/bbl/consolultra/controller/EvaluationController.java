@@ -163,7 +163,7 @@ public class EvaluationController {
 		Evaluation evaluation = er.findById(id).get();
 		
 		response.setContentType("application/xls");
-		response.setHeader("Content-Disposition", "attachment; filename="+ evaluation.getTitle() + ".xlsx");
+		response.setHeader("Content-Disposition", "attachment; filename="+ evaluation.getTitle() + ".xls");
 		new Excel().create(evaluation, response);
 		
 		/*try {
