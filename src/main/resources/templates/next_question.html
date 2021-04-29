@@ -18,9 +18,11 @@
 	
 	<div class="row center-aligh Default-Frame">
 	
-		<div class="row left-align">
-				<a th:href="@{/home?id=}+${answerSelected.answerCard.participant.id}"  class="waves-effect waves-light btn-small btn-flat Back-Button">Voltar</a>
-			
+		<div class="row">
+			<a th:href="@{/home?id=}+${answerSelected.answerCard.participant.id}"  class="waves-effect waves-light btn-small btn-flat Back-Button">Voltar</a>
+		</div>
+		<div class="row center-align red">
+			<span>ATENÇÃO: Leia os  </span> <a href="/articles">artigos</a> <span>antes de prosseguir</span>
 		</div>
 
 		<div id="loadingImg" class="center-align" style="display: none">
