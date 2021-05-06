@@ -1,8 +1,6 @@
 package br.com.bbl.consolultra.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -21,6 +19,7 @@ import br.com.bbl.consolultra.model.AnswerCard;
 import br.com.bbl.consolultra.model.Evaluation;
 import br.com.bbl.consolultra.model.Failed;
 import br.com.bbl.consolultra.model.Participant;
+import br.com.bbl.consolultra.repository.AnswerCardRepository;
 import br.com.bbl.consolultra.repository.EvaluationRepository;
 import br.com.bbl.consolultra.repository.FailedRepository;
 import br.com.bbl.consolultra.repository.ParticipantRepository;
@@ -35,32 +34,40 @@ public class HomeController {
 	private EvaluationRepository er;
 	
 	@Autowired
+	private AnswerCardRepository acr;
+	
+	@Autowired
 	private FailedRepository fr;
 
 	@RequestMapping(value = "/home")
 	private ModelAndView home(Integer id) {
 		try {
 			Participant participant = pr.findById(id).get();
+			
+			Evaluation evaluation = new Evaluation();
+			evaluation.setId(3);
+			AnswerCard answerCard = acr.findByEvaluationAndParticipant(evaluation, participant);
 	
 			// Carrega todas as avaliações
-			List<Evaluation> evaluations = new ArrayList<Evaluation>();
-			er.findAll().iterator().forEachRemaining(evaluations::add);
+			//List<Evaluation> evaluations = new ArrayList<Evaluation>();
+			//er.findAll().iterator().forEachRemaining(evaluations::add);
 	
 			// Remove da lista as avaliações inativadas
-			for (Evaluation evaluation : evaluations) {
-				if (!evaluation.getActive()) {
-					evaluations.remove(evaluation);
-				}
-			}
+			//for (Evaluation evaluation : evaluations) {
+			//	if (!evaluation.getActive()) {
+			//		evaluations.remove(evaluation);
+			//	}
+			//}
 	
 			// Remove da lista de avaliações o que já foi iniciado
-			for (AnswerCard answerCards : participant.getAnswerCards()) {
-				evaluations.remove(answerCards.getEvaluation());
-			}
+			//for (AnswerCard answerCards : participant.getAnswerCards()) {
+			//	evaluations.remove(answerCards.getEvaluation());
+			//}
 			
 			ModelAndView mv = new ModelAndView("home");
 			mv.addObject("participant", participant);
-			mv.addObject("evaluations", evaluations);
+			mv.addObject("answerCard", answerCard);
+			//mv.addObject("evaluations", evaluations);
 			return mv;
 		} catch (Exception e) {
 			Failed failed = new Failed(e.getMessage());
